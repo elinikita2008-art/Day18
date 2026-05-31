@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Приглашение на 18-летие Никиты</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1f1c2c 0%, #2a1e3c 100%);
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: radial-gradient(circle at 20% 30%, rgba(255,215,0,0.15) 2%, transparent 2.5%),
+                              radial-gradient(circle at 70% 80%, rgba(255,100,150,0.15) 1.8%, transparent 2%);
+            background-size: 50px 50px, 70px 70px;
+            z-index: 0;
+        }
+
+        .card {
+            background: rgba(20, 15, 35, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 40px 30px;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+            z-index: 2;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .age-badge {
+            background: #FFB347;
+            color: #1e1a2f;
+            font-weight: bold;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 1rem;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .date {
+            font-size: 1.3rem;
+            color: #f0e6c5;
+            background: rgba(0,0,0,0.4);
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 60px;
+            margin-bottom: 32px;
+        }
+
+        .question {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #FFE5B4;
+            margin-bottom: 45px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            min-height: 100px;
+        }
+
+        .btn {
+            border: none;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 14px 32px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.1s linear;
+            font-family: inherit;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        .btn-yes:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 22px rgba(46,204,113,0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #e67e22, #c0392b);
+            color: white;
+        }
+
+        .btn-no-fixed {
+            position: fixed !important;
+            z-index: 9999;
+            transition: left 0.12s ease, top 0.12s ease;
+            cursor: grab;
+        }
+
+        .thanks-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .thanks-message {
+            background: rgba(46,204,113,0.2);
+            padding: 20px;
+            border-radius: 50px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d4ffc6;
+            border: 1px solid #2ecc71;
+        }
+
+        .food-choice {
+            text-align: left;
+            background: rgba(0,0,0,0.4);
+            border-radius: 36px;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .food-choice h3 {
+            color: #FFD966;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            background: rgba(255,255,240,0.1);
+            border-radius: 60px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .option-item:hover {
+            background: rgba(255,215,0,0.2);
+        }
+        .option-item input {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #FFB347;
+        }
+        .option-item label {
+            font-size: 1.1rem;
+            color: #fff0cc;
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #FFB347, #FF8C00);
+            border: none;
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 60px;
+            width: 100%;
+            color: #1e1a2f;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .send-btn:hover {
+            transform: scale(0.98);
+            background: #ffa01e;
+        }
+
+        .result-message {
+            margin-top: 20px;
+            background: #2c2a3a;
+            border-radius: 40px;
+            padding: 15px;
+            font-size: 0.95rem;
+            color: #FFE5B4;
+            word-break: break-word;
+        }
+
+        .footer-emoji {
+            margin-top: 30px;
+            font-size: 1.8rem;
+            letter-spacing: 8px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 550px) {
+            .card { padding: 30px 20px; }
+            .btn { padding: 12px 24px; font-size: 1.2rem; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="mainCard">
+    <h1>🎉 Вы приглашены 🎉</h1>
+    <div class="age-badge">🔥 18 ЛЕТ — НАСТОЯЩАЯ ВЗРОСЛОСТЬ! 🔥</div>
+    <div class="date">📅 14 ИЮНЯ 2026 · ВОСКРЕСЕНЬЕ 📅</div>
+
+    <!-- начальный блок с вопросом -->
+    <div id="initialBlock">
+        <div class="question">✨ Никита зовёт отметить)) ✨<br>Хочешь пойти?)</div>
+        <div class="buttons" id="buttonsContainer">
+            <button class="btn btn-yes" id="yesBtn">✅ ПРИДУ!</button>
+            <button class="btn btn-no" id="noBtn">❌ НЕ ПРИДУ / НЕ ХОЧУ</button>
+        </div>
+        <div class="message-area" id="messageBox" style="margin-top:20px; padding:12px; background:rgba(0,0,0,0.5); border-radius:48px; color:#FFEFD0;">
+            👆 Нажми «ПРИДУ», чтобы подтвердить. А красная кнопка ... попробуй поймать 😈
+        </div>
+    </div>
+
+    <!-- блок благодарности + выбор еды -->
+    <div id="thanksBlock" class="thanks-section">
+        <div class="thanks-message">
+            🥳 СПАСЯБА, БРО/БРОШКА! С нетерпением жду тебя на моём 18-летии! 🥳<br>
+            📍 Адрес и точные детали скину в личку за пару дней.<br>
+            А пока выбери, что будешь есть/пить 👇
+        </div>
+
+        <div class="food-choice">
+            <h3>🍕 Что предпочитаешь? 🥤</h3>
+            <div class="options-grid" id="foodOptions">
+                <div class="option-item"><input type="checkbox" id="pizza" value="Пицца"> <label for="pizza">🍕 Пицца</label></div>
+                <div class="option-item"><input type="checkbox" id="rolls" value="Роллы"> <label for="rolls">🍣 Роллы</label></div>
+                <div class="option-item"><input type="checkbox" id="juice" value="Сок"> <label for="juice">🧃 Сок</label></div>
+                <div class="option-item"><input type="checkbox" id="soda" value="Газировка"> <label for="soda">🥤 Газировка</label></div>
+                <div class="option-item"><input type="checkbox" id="self" value="Принесём с собой (напитки/еду😁)"> <label for="self">🎒 Принесём с собой (напитки/еду😁)</label></div>
+            </div>
+            <button class="send-btn" id="sendPreferencesBtn">📨 Отправить мои предпочтения</button>
+            <div id="resultOutput" class="result-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="footer-emoji">
+        🥳 🎂 🎁
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ⚠️ ЗАМЕНИТЕ НА СВОЙ ЛОГИН ВК (короткое имя)
+        const VK_LOGIN = "YOUR_VK_LOGIN";   // Пример: "durov" или "id123456789"
+        // Если используешь числовой ID, раскомментируй строку ниже и закомментируй vk.me
+        // const VK_WRITE_LINK = `https://vk.com/write?user_id=123456789`;
+        const VK_ME_LINK = `https://vk.me/${VK_LOGIN}`;
+        
+        const initialBlock = document.getElementById('initialBlock');
+        const thanksBlock = document.getElementById('thanksBlock');
+        const yesBtn = document.getElementById('yesBtn');
+        let noButton = document.getElementById('noBtn');
+        const sendPrefsBtn = document.getElementById('sendPreferencesBtn');
+        const resultOutput = document.getElementById('resultOutput');
+        
+        let moveAttempts = 0;
+        let isNoButtonFixed = false;
+        
+        // ----- Убегающая кнопка -----
+        function moveNoButton() {
+            if (!noButton || noButton.disabled) return;
+            const btnWidth = noButton.offsetWidth;
+            const btnHeight = noButton.offsetHeight;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            let minX = 10;
+            let maxX = viewportWidth - btnWidth - 10;
+            let minY = 60;
+            let maxY = viewportHeight - btnHeight - 60;
+            
+            if (maxX < minX) maxX = minX + 5;
+            if (maxY < minY) maxY = minY + 5;
+            
+            let randomX = Math.random() * (maxX - minX) + minX;
+            let randomY = Math.random() * (maxY - minY) + minY;
+            if (isNaN(randomX)) randomX = 20;
+            if (isNaN(randomY)) randomY = 100;
+            
+            if (!isNoButtonFixed) {
+                noButton.style.position = 'fixed';
+                noButton.style.margin = '0';
+                noButton.classList.add('btn-no-fixed');
+                isNoButtonFixed = true;
+            }
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            
+            noButton.style.transform = 'scale(0.97)';
+            setTimeout(() => { if(noButton) noButton.style.transform = ''; }, 100);
+            
+            moveAttempts++;
+            const msgBox = document.getElementById('messageBox');
+            if (msgBox) {
+                if (moveAttempts === 5) msgBox.innerHTML = `<span>🏃‍♂️ Убегает уже в ${moveAttempts}-й раз! Сдавайся и нажми "ПРИДУ" 😁</span>`;
+                else if (moveAttempts === 10) msgBox.innerHTML = `<span>🤣 Серьёзно?! Ты всё ещё пытаешься отказаться? Нажми зелёную, там кекс будет 🧁</span>`;
+                else if (moveAttempts > 15) msgBox.innerHTML = `<span>😈 Ладно, ты упрямый... но кнопка всё равно не даст себя нажать! Жми «ПРИДУ» 👇</span>`;
+            }
+        }
+        
+        function onMouseEnterNo() { moveNoButton(); }
+        function onTouchStartNo(e) { e.preventDefault(); moveNoButton(); return false; }
+        function onNoClick(e) { e.preventDefault(); moveNoButton(); return false; }
+        
+        function bindNoEvents() {
+            if (!noButton) return;
+            noButton.addEventListener('mouseenter', onMouseEnterNo);
+            noButton.addEventListener('touchstart', onTouchStartNo, { passive: false });
+            noButton.addEventListener('click', onNoClick);
+        }
+        
+        // ----- Нажатие "ПРИДУ" -----
+        function confirmComing() {
+            initialBlock.style.display = 'none';
+            thanksBlock.style.display = 'block';
+            
+            if (noButton) {
+                noButton.removeEventListener('mouseenter', onMouseEnterNo);
+                noButton.removeEventListener('touchstart', onTouchStartNo);
+                noButton.removeEventListener('click', onNoClick);
+                if (isNoButtonFixed) {
+                    noButton.style.position = '';
+                    noButton.style.left = '';
+                    noButton.style.top = '';
+                }
+                noButton.style.display = 'none';
+                noButton.disabled = true;
+            }
+            createConfetti();
+        }
+        
+        // ----- Отправка предпочтений (с упором на VK) -----
+        function sendPreferences() {
+            const checkboxes = document.querySelectorAll('#foodOptions input[type="checkbox"]');
+            const selected = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selected.push(cb.value);
+            });
+            
+            let prefsText = '';
+            if (selected.length === 0) {
+                prefsText = 'пока не определился(лась) с выбором';
+            } else {
+                prefsText = selected.join(', ');
+            }
+            
+            const fullMessage = `🎉 Привет, Никита! Я приду на твой ДР (18 лет, 14 июня). Мой выбор: ${prefsText}. Жду вечеринку! 🥳`;
+            
+            resultOutput.style.display = 'block';
+            resultOutput.innerHTML = `
+                <strong>✨ Готово! ✨</strong><br>
+                📋 Твой ответ: <em>${fullMessage}</em><br><br>
+                👇 Теперь просто напиши Никите в VK и вставь этот текст (или нажми на кнопки).<br>
+                <div style="display:flex; gap:12px; margin-top:15px; flex-wrap:wrap; justify-content:center;">
+                    <button id="copyResultBtn" style="background:#4682B4; border:none; padding:10px 20px; border-radius:40px; color:white; cursor:pointer;">📋 Скопировать текст</button>
+                    <button id="vkChatBtn" style="background:#4C75A3; border:none; padding:10px 20px; border-radius:40px; color:white; cursor:pointer;">💬 Перейти в VK и написать</button>
+                </div>
+                <div style="margin-top: 12px; font-size:0.85rem; opacity:0.8;">⬅️ Сначала скопируй текст, потом жми на VK</div>
+            `;
+            
+            // Копирование
+            const copyBtn = document.getElementById('copyResultBtn');
+            if (copyBtn) {
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(fullMessage);
+                    alert('✅ Текст скопирован! Теперь открой VK и отправь сообщение Никите.');
+                };
+            }
+            // Кнопка VK (открывает чат)
+            const vkBtn = document.getElementById('vkChatBtn');
+            if (vkBtn) {
+                vkBtn.onclick = () => {
+                    if (VK_LOGIN === "YOUR_VK_LOGIN") {
+                        alert("⚠️ Именинник ещё не настроил ссылку на VK. Пока напиши ему в личку вручную. \n(Он скоро исправит код)");
+                    } else {
+                        window.open(VK_ME_LINK, '_blank');
+                    }
+                };
+            }
+        }
+        
+        // Конфетти
+        function createConfetti() {
+            for (let i = 0; i < 80; i++) {
+                const conf = document.createElement('div');
+                conf.innerHTML = ['🎉','🎊','✨','🥳','🎈','🎂','🍾'][Math.floor(Math.random()*7)];
+                conf.style.position = 'fixed';
+                conf.style.left = Math.random() * window.innerWidth + 'px';
+                conf.style.top = '-30px';
+                conf.style.fontSize = (Math.random() * 20 + 14) + 'px';
+                conf.style.pointerEvents = 'none';
+                conf.style.zIndex = '10000';
+                conf.style.opacity = '0.9';
+                document.body.appendChild(conf);
+                const fallX = (Math.random() - 0.5) * 100;
+                const finalTop = window.innerHeight + 50;
+                conf.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${fallX}px, ${finalTop}px) rotate(360deg)`, opacity: 0 }
+                ], {
+                    duration: 1500 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.2, 0.9, 0.4, 1)',
+                    fill: 'forwards'
+                });
+                setTimeout(() => conf.remove(), 2500);
+            }
+        }
+        
+        // Ресайз
+        function adjustNoButtonOnResize() {
+            if (isNoButtonFixed && noButton && !noButton.disabled && noButton.style.display !== 'none') {
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                const btnW = noButton.offsetWidth;
+                const btnH = noButton.offsetHeight;
+                let left = parseFloat(noButton.style.left);
+                let top = parseFloat(noButton.style.top);
+                if (isNaN(left)) left = 20;
+                if (isNaN(top)) top = 100;
+                let newLeft = Math.min(Math.max(left, 10), vw - btnW - 10);
+                let newTop = Math.min(Math.max(top, 60), vh - btnH - 60);
+                if (newLeft !== left) noButton.style.left = newLeft + 'px';
+                if (newTop !== top) noButton.style.top = newTop + 'px';
+            }
+        }
+        
+        // Запуск
+        bindNoEvents();
+        yesBtn.addEventListener('click', confirmComing);
+        sendPrefsBtn.addEventListener('click', sendPreferences);
+        window.addEventListener('resize', adjustNoButtonOnResize);
+        
+        setTimeout(() => {
+            if (noButton && !noButton.disabled) {
+                noButton.style.transform = 'rotate(1deg)';
+                setTimeout(() => { if(noButton) noButton.style.transform = ''; }, 200);
+            }
+        }, 500);
+    })();
+</script>
+</body>
+</html>
